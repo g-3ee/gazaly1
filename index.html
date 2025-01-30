@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نتائج طلاب كلية التربية الرياضية - جامعة جنوب الوادي</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            direction: rtl;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #fff;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid #4CAF50;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .logos {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0 20px;
+            align-items: center;
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .titles {
+            text-align: center;
+            flex-grow: 1;
+            margin: 0 20px;
+        }
+
+        .university-name {
+            color: #333;
+            margin: 5px 0;
+            font-size: 32px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .university-name:hover {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 8px;
+            transform: translateY(-2px);
+        }
+
+        .faculty-name {
+            color: #4CAF50;
+            margin: 5px 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 25px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        .search-box {
+            text-align: center;
+            margin: 25px 0;
+        }
+
+        input {
+            padding: 12px;
+            width: 250px;
+            margin-left: 15px;
+            border: 2px solid #4CAF50;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        button {
+            padding: 12px 25px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background-color: #45a049;
+            transform: translateY(-2px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 25px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: right;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-size: 16px;
+        }
+
+        .developer-signature {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            font-size: 24px;
+            color: #4CAF50;
+        }
+
+        .developer-name {
+            font-weight: bold;
+            font-size: 28px;
+            background: linear-gradient(45deg, #4CAF50, #45a049, #2196F3, #4CAF50);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            padding: 0 10px;
+            animation: float 3s ease-in-out infinite, gradientMove 5s ease infinite;
+        }
+
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .charts-container {
+            margin: 20px 0;
+            padding: 15px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .share-buttons {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            justify-content: center;
+        }
+
+        .share-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: white;
+        }
+
+        .share-btn.whatsapp { background-color: #25D366; }
+        .share-btn.facebook { background-color: #1877F2; }
+
+        .motivational-message {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 20px 0;
+            font-size: 18px;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @media (max-width: 768px) {
+            .container { margin: 15px; padding: 15px; }
+            input { width: 100%; margin: 0 0 10px 0; }
+            button { width: 100%; }
+            .share-buttons { flex-direction: column; }
+            .logos { flex-direction: column; }
+            .logo { margin: 10px 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logos">
+            <img src="./index/images.jpg" alt="شعار الجامعة" class="logo">
+            <div class="titles">
+                <h2 class="university-name">جامعة جنوب الوادي</h2>
+                <h3 class="faculty-name">كلية التربية الرياضية</h3>
+            </div>
+            <img src="./index/download.jpg" alt="شعار الكلية" class="logo">
+        </div>
+    </div>
+
+    <div class="container">
+        <h1>جامعة جنوب الوادي</h1>
+        <h1>كلية العلوم الرياضيه</h1>
+        <h1>نتيجة الطالب/ة</h1>
+        <div class="search-box">
+            <input type="text" id="seatNumber" placeholder="ادخل رقم الجلوس" maxlength="4" pattern="[0-9]{4}">
+            <button onclick="getResults()">عرض النتيجة</button>
+        </div>
+
+        <div id="results" style="display: none;">
+            <div class="result-header">
+                <div class="student-info">
+                    <div class="info-item">رقم الجلوس: <span id="displaySeatNumber"></span></div>
+                    <div class="info-item">الفرقة: الأولى</div>
+                    <div class="info-item">العام الدراسي: 2024-2025</div>
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>المادة</th>
+                        <th>أعمال السنة</th>
+                        <th>الدرجة</th>
+                        <th>المجموع</th>
+                        <th>التقدير</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsBody"></tbody>
+            </table>
+
+            <div id="motivationalMessage" class="motivational-message"></div>
+            <div id="statisticsContainer" class="statistics-container"></div>
+            <div class="charts-container">
+                <canvas id="gradesChart"></canvas>
+            </div>
+
+            <div class="share-buttons">
+                <button onclick="shareResult('whatsapp')" class="share-btn whatsapp">
+                    <i class="fab fa-whatsapp"></i> مشاركة عبر واتساب
+                </button>
+                <button onclick="shareResult('facebook')" class="share-btn facebook">
+                    <i class="fab fa-facebook-f"></i> مشاركة عبر فيسبوك
+                </button>
+                <button onclick="printResult()" class="share-btn">
+                    <i class="fas fa-print"></i> طباعة النتيجة
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="developer-signature">
+        تطوير: <span class="developer-name">الغزالي</span>
+    </div>
+
+    <script>
+        function getRandomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function getYearWorkScore(type) {
+            if (type === "major") {
+                return getRandomNumber(25, 45);
+            } else {
+                return getRandomNumber(17, 29);
+            }
+        }
+
+        function calculateGrade(score, maxScore) {
+            const percentage = (score / maxScore) * 100;
+            if (percentage >= 85) return "ممتاز";
+            if (percentage >= 75) return "جيد جداً";
+            if (percentage >= 65) return "جيد";
+            if (percentage >= 50) return "مقبول";
+            return "راسب";
+        }
+
+        function getMotivationalMessage(totalScore, maxPossibleScore) {
+            const percentage = (totalScore / maxPossibleScore) * 100;
+            if (percentage >= 85) return "أداء متميز! استمر في تفوقك وإبداعك 🌟";
+            if (percentage >= 75) return "أداء رائع! أنت على الطريق الصحيح 👏";
+            if (percentage >= 65) return "جهد جيد! واصل التقدم والتحسن 💪";
+            if (percentage >= 50) return "لا بأس! يمكنك تحقيق المزيد بمزيد من الجهد 📚";
+            return "لا تيأس! كل تجربة هي فرصة للتعلم والتحسن 🌱";
+        }
+
+        function createChart(subjects, scores) {
+            const ctx = document.getElementById('gradesChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: subjects,
+                    datasets: [{
+                        label: 'درجات المواد',
+                        data: scores,
+                        backgroundColor: '#4CAF50',
+                        borderColor: '#45a049',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: { beginAtZero: true, max: 150 }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'توزيع الدرجات',
+                            font: { size: 16 }
+                        }
+                    }
+                }
+            });
+        }
+
+        function getResults() {
+            const seatNumber = document.getElementById("seatNumber").value;
+            if (!validateInput(seatNumber)) {
+                alert("رقم الجلوس يجب أن يتكون من 4 أرقام فقط");
+                return;
+            }
+
+            const results = document.getElementById("results");
+            const resultsBody = document.getElementById("resultsBody");
+            resultsBody.innerHTML = "";
+            
+            let totalScore = 0;
+            const subjects = [];
+            const scores = [];
+            
+            for (const subject in defaultResults) {
+                const yearWork = getYearWorkScore(defaultResults[subject].type);
+                let score;
+                if (defaultResults[subject].type === "major") {
+                    score = getRandomNumber(50, 80);
+                } else {
+                    score = getRandomNumber(35, 69);
+                }
+                
+                const total = yearWork + score;
+                totalScore += total;
+                subjects.push(subject);
+                scores.push(total);
+                
+                const grade = calculateGrade(total, defaultResults[subject].maxScore);
+                
+                const row = `
+                    <tr>
+                        <td>${subject}</td>
+                        <td>${yearWork}</td>
+                        <td>${score}</td>
+                        <td class="score-cell">${total}</td>
+                        <td>${grade}</td>
+                    </tr>
+                `;
+                resultsBody.innerHTML += row;
+            }
+
+            document.getElementById("displaySeatNumber").textContent = seatNumber;
+            document.getElementById("motivationalMessage").textContent = 
+                getMotivationalMessage(totalScore, Object.keys(defaultResults).length * 150);
+            
+            createChart(subjects, scores);
+            results.style.display = "block";
+            
+            storageSystem.saveResult(seatNumber, {
+                totalScore,
+                subjects,
+                scores,
+                timestamp: new Date()
+            });
+        }
+
+        function validateInput(input) {
+            return /^[0-9]{4}$/.test(input);
+        }
+
+        function printResult() {
+            window.print();
+        }
+
+        function shareResult(platform) {
+            const text = `نتيجتي في كلية التربية الرياضية - جامعة جنوب الوادي`;
+            const url = window.location.href;
+            
+            if (platform === 'whatsapp') {
+                window.open(`https://wa.me/?text=${encodeURIComponent(text + '\n' + url)}`);
+            } else if (platform === 'facebook') {
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`);
+            }
+        }
+
+        const storageSystem = {
+            saveResult(seatNumber, data) {
+                const savedResults = JSON.parse(localStorage.getItem('results') || '{}');
+                savedResults[seatNumber] = data;
+                localStorage.setItem('results', JSON.stringify(savedResults));
+            },
+            getResult(seatNumber) {
+                const savedResults = JSON.parse(localStorage.getItem('results') || '{}');
+                return savedResults[seatNumber];
+            }
+        };
+        const defaultResults = {
+            "مضمار": { maxScore: 150,type:"major"},
+            "تمرينات": { maxScore:150, type: "major" },
+            "مبارزة": { maxScore: 150, type: "major" },
+            "قدم": { maxScore: 150, type: "major" },
+            "تشريح": { maxScore: 100, type: "minor" },
+            "ادارة": { maxScore: 100, type: "minor" },
+            "انجليزي": { maxScore: 100, type: "minor" },
+            "فلسفة وتاريخ التربية الرياضية": { maxScore: 70, type: "minor" }
+        };
+    
+       </script>
+</body>
+</html>
