@@ -216,6 +216,11 @@
             .logo { margin: 10px 0; }
         }
     </style>
+    <div style="text-align: center; margin: 20px; padding: 10px; background: #4CAF50; color: white; border-radius: 8px;">
+        <span>عدد الزوار: </span>
+        <span id="visitorCount" style="font-weight: bold; font-size: 20px;"></span>
+    </div>
+    
 </head>
 <body>
     <div class="header">
@@ -462,6 +467,22 @@
             "انجليزي": { maxScore: 100, type: "minor" },
             "فلسفة وتاريخ التربية الرياضية": { maxScore: 70, type: "minor" }
         };
+        // Visitor counter implementation
+function updateVisitorCount() {
+    let count = localStorage.getItem('visitorCount');
+    if (!count) {
+        count = 200;
+    } else {
+        count = parseInt(count) + 1;
+    }
+    localStorage.setItem('visitorCount', count);
+    document.getElementById('visitorCount').textContent = count;
+}
+
+// Call when page loads
+document.addEventListener('DOMContentLoaded', updateVisitorCount);
+
     </script>    
 </body>
 </html>
+
